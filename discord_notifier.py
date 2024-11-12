@@ -1,9 +1,9 @@
 from discordwebhook import Discord
 
-def notify_to_discord_channel(first_team_name, second_team_name, different_value, current_url, game_time, pre_game_total, current_total, difference_calibrated):
+def notify_to_discord_channel(title_text, image, average_sold_price):
     discord = Discord(url="https://discordapp.com/api/webhooks/1302301351878852741/X-0BTXp8LsZn0_1W1lNkClyCvnKztHGvpZIwoknOE5_xm3VRXXxdqZEwv-wF2Dpzqxuu")
-    title = f"🤖Bratz x Mean Girls Collector Dolls - Karen & Gretchen 2-Pack presale 11/8 eta"
-    message = f":face_with_open_eyes_and_hand_over_mouth:  It is [**{str(different_value)}**]({current_url}) different from the pre game total 👀"
+    title = f"🤖{title_text}"
+    # message = f":face_with_open_eyes_and_hand_over_mouth:  It is [**{str(different_value)}**]({current_url}) different from the pre game total 👀"
     # discord.post(content=message)
     discord.post(
         username="Hyped.AI",
@@ -17,10 +17,10 @@ def notify_to_discord_channel(first_team_name, second_team_name, different_value
                 #     "icon_url": ""
                 # },
                 "title": title,
-                "description": message,
-                "thumbnail": {"url": "https://img.freepik.com/free-vector/gradient-basketball-logo-template_23-2149373179.jpg?w=740&t=st=1699446730~exp=1699447330~hmac=beaa2f964db5c9ba2f4805f248e5bc42949e5b9c896b89f78de3b6a5d4a2d8dd"},
+                # "description": message,
+                "thumbnail": {"url": image},
                 "color": 15258703,
-                "url": current_url,
+                # "url": current_url,
                 "fields": [
                     {
                         "name": "🏷Possible Vinyl Cost",
@@ -29,7 +29,7 @@ def notify_to_discord_channel(first_team_name, second_team_name, different_value
                     },
                     {
                         "name": "💸Average Sell Price",
-                        "value": str("pre_game_total"),
+                        "value": str(average_sold_price),
                         # "inline": True
                     },
                     {
@@ -39,12 +39,12 @@ def notify_to_discord_channel(first_team_name, second_team_name, different_value
                     },
                     {
                         "name": "✅️Ebay Comp",
-                        "value": str(difference_calibrated),
+                        "value": "",
                         # "inline": True
                     },
                 ],
                 "image": {
-                    "url": "https://i.ebayimg.com/images/g/ws0AAOSwCC9nKt7d/s-l1600.webp"
+                    "url": image
                 },
                 # "footer": {
                 #     "text": "NBA",
@@ -54,4 +54,4 @@ def notify_to_discord_channel(first_team_name, second_team_name, different_value
         ],
     )
 
-notify_to_discord_channel("CCC", "BBB", "8", "https://img.freepik.com/", "2023-11-09 02:30", 237.5, 240.5, 5)
+# notify_to_discord_channel("CCC", "BBB", "8", "https://img.freepik.com/", "2023-11-09 02:30", 237.5, 240.5, 5)
