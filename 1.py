@@ -54,7 +54,7 @@ link_counter = 0  # Counter for links
 max_links = 5  # Max number of links to open
 price_range = ""
 options = uc.ChromeOptions()
-driver = uc.Chrome(options=options)
+driver = uc.Chrome(version_main=130)
 driver.maximize_window()
 driver.get("https://www.ebay.com/sch/i.html?_from=R40&_nkw=presale&_sacat=0&_sop=10")
 
@@ -108,9 +108,7 @@ for title, image, price in zip(title_list, image_list, price_list):
     print(len(comparison_items))
     
     # sleep(3)
-    # driver.close()
-
-    # driver.switch_to.window(main_window)
+    
 
     if len(comparison_items) > 10:
         comparison_items = comparison_items[:10]
@@ -171,6 +169,18 @@ for title, image, price in zip(title_list, image_list, price_list):
     print(f"Average sold price: {average_sold_price}")
     print(image)
     if average_sold_price != "$Unreliable Sales Data Found":
-        discord_notifier.notify_to_discord_channel(title, image, average_sold_price)
+        driver.close()
+        driver.switch_to.window(main_window)
 
+        driver.switch_to.new_window('tab')
+        driver.get("https://www.google.com/search?q=" + sanitized_title_text)
+        discord_notifier.notify_to_discord_channel(title, image, average_sold_price)
+    else:
+        driver.close()
+
+        driver.switch_to.window(main_window)
+
+    
+
+print(title_list)
     # break
