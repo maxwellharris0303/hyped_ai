@@ -18,14 +18,6 @@ from openai import OpenAI
 import discord_notifier
 import google_search
 
-# Discord bot token and channel ID
-DISCORD_TOKEN = 'MTMwMDkxMTc2MTU0ODkwNjUxNg.GslcYm.kUi-YZ-WvZeHch8pL6KcR7fM4JAcPjTAyZO6iA'
-CHANNEL_ID = 1295757053997879332  # Replace with your channel ID (must be an integer)
-global last_post_title
-last_post_title = ""
-# Create a separate Chrome instance for each data source
-
-
 def is_similar(a, b, threshold=0.70):
     """Check if two strings are similar by a given threshold."""
     return SequenceMatcher(None, a, b).ratio() > threshold
@@ -34,26 +26,9 @@ def is_similar_sportscard(a, b, threshold=0.90):
     """Check if two strings are similar by a given threshold."""
     return SequenceMatcher(None, a, b).ratio() > threshold
 
-async def send_to_discord(message):
-    """Send a message to the Discord channel."""
-    client = discord.Client(intents=discord.Intents.default())
-
-    @client.event
-    async def on_ready():
-        print(f'Logged in as {client.user}')
-        channel = client.get_channel(CHANNEL_ID)
-        if channel:
-            await channel.send(message)
-        await client.close()
-
-    await client.start(DISCORD_TOKEN)
     
 
 # below finds hype flips
-link_cost = []
-link_counter = 0  # Counter for links
-max_links = 5  # Max number of links to open
-price_range = ""
 options = uc.ChromeOptions()
 driver = uc.Chrome(version_main=130)
 driver.maximize_window()
