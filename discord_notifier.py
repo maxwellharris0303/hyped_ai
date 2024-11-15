@@ -1,6 +1,8 @@
 from discordwebhook import Discord
 
-def notify_to_discord_channel(title_text, image, average_sold_price):
+def notify_to_discord_channel(title_text, image, average_sold_price, possible_buy_links, price_range, search_ebay_flip):
+
+
     discord = Discord(url="https://discordapp.com/api/webhooks/1302301351878852741/X-0BTXp8LsZn0_1W1lNkClyCvnKztHGvpZIwoknOE5_xm3VRXXxdqZEwv-wF2Dpzqxuu")
     title = f"🤖{title_text}"
     # message = f":face_with_open_eyes_and_hand_over_mouth:  It is [**{str(different_value)}**]({current_url}) different from the pre game total 👀"
@@ -24,7 +26,7 @@ def notify_to_discord_channel(title_text, image, average_sold_price):
                 "fields": [
                     {
                         "name": "🏷Possible Vinyl Cost",
-                        "value": "Price range: $50.00 - $100.00",
+                        "value": price_range,
                         # "inline": True
                     },
                     {
@@ -34,12 +36,13 @@ def notify_to_discord_channel(title_text, image, average_sold_price):
                     },
                     {
                         "name": "🔗Possible Buy Links",
-                        "value": "[Click Here](https://img.freepik.com/free-vector/gradient-basketball-logo-template_23-2149373179.jpg)",
+                        # "value": "[Click Here](https://img.freepik.com/free-vector/gradient-basketball-logo-template_23-2149373179.jpg)",
+                        "value": f"{', '.join(possible_buy_links)}",
                         # "inline": True
                     },
                     {
                         "name": "✅️Ebay Comp",
-                        "value": "",
+                        "value": f"[Click Here]({str(search_ebay_flip)})",
                         # "inline": True
                     },
                 ],

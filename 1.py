@@ -16,6 +16,7 @@ import datetime
 import random
 from openai import OpenAI
 import discord_notifier
+import google_search
 
 # Discord bot token and channel ID
 DISCORD_TOKEN = 'MTMwMDkxMTc2MTU0ODkwNjUxNg.GslcYm.kUi-YZ-WvZeHch8pL6KcR7fM4JAcPjTAyZO6iA'
@@ -169,18 +170,18 @@ for title, image, price in zip(title_list, image_list, price_list):
     print(f"Average sold price: {average_sold_price}")
     print(image)
     if average_sold_price != "$Unreliable Sales Data Found":
-        driver.close()
-        driver.switch_to.window(main_window)
-
-        driver.switch_to.new_window('tab')
-        driver.get("https://www.google.com/search?q=" + sanitized_title_text)
-        discord_notifier.notify_to_discord_channel(title, image, average_sold_price)
-    else:
-        driver.close()
-
-        driver.switch_to.window(main_window)
-
-    
-
-print(title_list)
-    # break
+        result = google_search.search(title)
+        print(result)
+        if len(result) !=0:
+            # Loop through the dictionary and print each URL with its prices
+            possible_prices = []
+            possible_buy_links = []
+            for url, prices in result.items():
+                print(f"URL: {url}")
+                possible_buy_links.append(url)
+                possible_prices = [float(price.replace('$', '').replace(',', '')) for price in prices]
+                print(f"Price: {prices}")
+            price_range = f"Price range: ${min(possible_prices):.2f} - ${max(possible_prices):.2f}"
+            discord_notifier.notify_to_discord_channel(title, image, average_sold_price, possible_buy_links, price_range, search_ebay_flip)
+    driver.close()
+    driver.switch_to.window(main_window)
