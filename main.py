@@ -69,7 +69,6 @@ for item in items:
 print(title_list)
 print(price_list)
 print(image_list)
-
 main_window = driver.current_window_handle
 
 for title, image, price in zip(title_list, image_list, price_list):
@@ -151,33 +150,33 @@ for title, image, price in zip(title_list, image_list, price_list):
             # Loop through the dictionary and print each URL with its prices
             possible_prices = []
             possible_buy_links = []
-            # Iterate through the dictionary
-            for link, data in result.items():
-                print(f"Link: {link}")
+            release_dates = []
+
+            for data in result:
+                link = data["link"]
+                prices = data["price_list"]
+                dates = data["release_dates"]
+
                 possible_buy_links.append(link)
-                # Access the nested dictionary
-                price_list = data["price_list"]
-                release_dates = data["release_dates"]
-                
-                possible_prices = [float(price.replace('$', '').replace(',', '')) for price in price_list]
+
+                print(f"Link: {link}")
                 # Print price list
                 print("  Price List:")
-                for price in price_list:
+                for price in prices:
                     print(f"    - {price}")
+                    possible_prices.append(float(price.replace('$', '').replace(',', '')))
 
                 # Print release dates
                 print("  Release Dates:")
-                for date in release_dates:
+                for date in dates:
                     print(f"    - {date}")
+                    release_dates.append(date)
 
                 print()  # Add a blank line for better readability
 
-            for url, prices in result.items():
-                print(f"URL: {url}")
-                possible_buy_links.append(url)
-                possible_prices = [float(price.replace('$', '').replace(',', '')) for price in prices]
-                print(f"Price: {prices}")
-            price_range = f"Price range: ${min(possible_prices):.2f} - ${max(possible_prices):.2f}"
-            discord_notifier.notify_to_discord_channel(title, image, average_sold_price, possible_buy_links, price_range, search_ebay_flip)
+            if len(possible_prices) != 0:
+                price_range = f"Price range: ${min(possible_prices):.2f} - ${max(possible_prices):.2f}"
+                print(price_range)
+                discord_notifier.notify_to_discord_channel(title, image, average_sold_price, possible_buy_links, price_range, release_dates, search_ebay_flip)
     driver.close()
     driver.switch_to.window(main_window)

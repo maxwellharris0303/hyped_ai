@@ -34,7 +34,6 @@ def get_result(content):
     unique_dates = sorted(set(dates))
 
     # Print the results
-    print("Extracted Dates:")
     for date in unique_dates:
         print(date)
     

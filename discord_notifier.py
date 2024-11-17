@@ -1,6 +1,6 @@
 from discordwebhook import Discord
 
-def notify_to_discord_channel(title_text, image, average_sold_price, possible_buy_links, price_range, search_ebay_flip):
+def notify_to_discord_channel(title_text, image, average_sold_price, possible_buy_links, price_range, release_dates, search_ebay_flip):
 
 
     discord = Discord(url="https://discordapp.com/api/webhooks/1302301351878852741/X-0BTXp8LsZn0_1W1lNkClyCvnKztHGvpZIwoknOE5_xm3VRXXxdqZEwv-wF2Dpzqxuu")
@@ -32,6 +32,11 @@ def notify_to_discord_channel(title_text, image, average_sold_price, possible_bu
                     {
                         "name": "💸Average Sell Price",
                         "value": str(average_sold_price),
+                        # "inline": True
+                    },
+                    {
+                        "name": "⏰ Drop Date",
+                        "value": f"{', '.join(release_dates)}",
                         # "inline": True
                     },
                     {

@@ -27,7 +27,6 @@ import extract_price
 
 def search(title_text):
     sanitized_title_text = urllib.parse.quote_plus(title_text)
-    print(sanitized_title_text)
     options = uc.ChromeOptions()
     driver = uc.Chrome(version_main=130)
     driver.maximize_window()
@@ -52,14 +51,9 @@ def search(title_text):
 
     possible_links_unfiltered = list(set(possible_links_unfiltered))
 
-    print(possible_links_unfiltered)
-
-    print(len(possible_links_unfiltered))
-
     # Convert array to a comma-separated string
     hrefs_string = ", ".join(possible_links_unfiltered)
 
-    print(hrefs_string)
 
     prompt = (
         "Sort through the links. ONLY OUTPUT LINKS THAT COULD BE THE PRODUCT LINK MATCHING THE PRODUCT: "
@@ -83,25 +77,28 @@ def search(title_text):
     response_message = completion.choices[0].message.content  # Use .content to get the message
     # Splitting the content by " \n" and storing it in a list
     links_list = [link.strip() for link in response_message.split("\n")]
-    print("COMPLETED LIST:")
-    print(links_list)
+    print("#############################")
+    print("COMPLETED LIST:", links_list)
+    print("#############################")
 
-    result = {}
+    result = []
 
     for link in links_list:
         driver.get(link)
 
         # Get the page source
-        page_source = driver.page_source
+        content = driver.page_source
 
-        price_list = extract_price.get_result(page_source)
-        release_dates = extract_date.get_result(page_source)
+        price_list = extract_price.get_result(content)
+        release_dates = extract_date.get_result(content)
 
-        result[link] = {
+        data = {
+            "link": link,
             "price_list": price_list,
             "release_dates": release_dates
         }
-        
+        result.append(data)
+
     driver.quit()
     return result
 
