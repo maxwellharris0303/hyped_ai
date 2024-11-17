@@ -1,8 +1,30 @@
-text = {'https://americanbrickstore.com/muunilinst-arc-trooper-minifigures-star-wars-the-clone-wars-clone-troopers-muunilinst-10/': ['$3.99'], 'https://americanbrickstore.com/phase-1-clone-trooper-minifigures-star-wars-captain-rex-commander-cody-commander-wolffe-muunilinst-arc-trooper/': ['$6.99', '$3.99'], 'https://americanbrickstore.com/captain-fordo-arc-trooper-minifigure-star-wars-the-clone-wars-clone-trooper-muunilinst-10/': ['$3.99']}
+result = {
+    "https://example.com/1": {
+        "price_list": [10.99, 12.99],
+        "release_dates": ["2023-01-01", "2023-02-01"]
+    },
+    "https://example.com/2": {
+        "price_list": [9.99, 11.99],
+        "release_dates": ["2023-03-01", "2023-04-01"]
+    }
+}
 
-# Loop through the dictionary and print each URL with its prices
-for url, prices in text.items():
-    print(f"URL: {url}")
-    print(f"Price: {prices}")
+# Iterate through the dictionary
+for link, data in result.items():
+    print(f"Link: {link}")
+    
+    # Access the nested dictionary
+    price_list = data["price_list"]
+    release_dates = data["release_dates"]
 
-print(len(text))
+    # Print price list
+    print("  Price List:")
+    for price in price_list:
+        print(f"    - {price}")
+
+    # Print release dates
+    print("  Release Dates:")
+    for date in release_dates:
+        print(f"    - {date}")
+
+    print()  # Add a blank line for better readability

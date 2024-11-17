@@ -19,6 +19,8 @@ from gpt_api.cli import clear_screen
 from openai import OpenAI
 import os
 from bs4 import BeautifulSoup
+import extract_date
+import extract_price
 
 # title_text = "Presale The Stanley X LoveShackFancy Holiday Quencher | 20 OZ - Rosa Beaux Pink"
 
@@ -91,30 +93,15 @@ def search(title_text):
 
         # Get the page source
         page_source = driver.page_source
-        # Refined regex to focus on prices like $8.99 or similar (avoid $100.00 if possible)
-        price_matches = re.findall(r'[\$]\s?\d{1,3}(?:\s?[,.\s]\d{3})*(?:[.,]\d{2})?', page_source)
-        # print(set(list(price_matches)))
-        # print(price_matches)
 
-        # Parse the HTML
-        soup = BeautifulSoup(page_source, 'html.parser')
+        price_list = extract_price.get_result(page_source)
+        release_dates = extract_date.get_result(page_source)
 
-        # Find elements where any attribute contains 'price'
-        elements_with_price = soup.find_all(lambda tag: any('price' in str(value).lower() for value in tag.attrs.values()))
-
-        price_pattern = re.compile(r'^[\$]\s?\d{1,3}(?:\s?[,.\s]\d{3})*(?:[.,]\d{2})?$')
-
-        # Filter and print only the lines that match exactly the price format
-        price_list = []
-        for element in elements_with_price:
-            text = element.text.strip()
-            if price_pattern.fullmatch(text) and text != "$0.00" and text != "$ 0.00":
-                price_list.append(text)
-
-        price_list = list(set(price_list))
-        print(price_list)
-        if len(price_list) != 0:
-            result[link] = price_list
+        result[link] = {
+            "price_list": price_list,
+            "release_dates": release_dates
+        }
+        
     driver.quit()
     return result
 
