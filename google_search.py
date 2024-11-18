@@ -6,21 +6,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, StaleElementReferenceException
-import discord  # Add discord library for bot functionality
-import re
-import asyncio
-import statistics
 import urllib.parse
-import asyncio
-import datetime
-import random
-from gpt_api import ask
-from gpt_api.cli import clear_screen
 from openai import OpenAI
 import os
 from bs4 import BeautifulSoup
 import extract_date
 import extract_price
+from format_date import get_formatted_dates
 
 # title_text = "Presale The Stanley X LoveShackFancy Holiday Quencher | 20 OZ - Rosa Beaux Pink"
 
@@ -34,13 +26,12 @@ def search(title_text):
 
     unwanted_links = [
         "google.com",
-        "ebay.com",
+        "ebay.co",
         "stockx.com",
         "instagram.com",
         "facebook.com",
         "reddit.com",
         "tiktok.com"
-        
     ]
 
     search_result = driver.find_element(By.CSS_SELECTOR, "div[id=\"search\"]")
@@ -95,7 +86,7 @@ def search(title_text):
         data = {
             "link": link,
             "price_list": price_list,
-            "release_dates": release_dates
+            "release_dates": get_formatted_dates(release_dates)
         }
         result.append(data)
 

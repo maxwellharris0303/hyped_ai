@@ -1,34 +1,44 @@
-result = {
-    "https://example.com/1": {
-        "price_list": ["10.99", "12.99"],
-        "release_dates": ["2023-01-01", "2023-02-01"]
-    },
-    "https://example.com/2": {
-        "price_list": ["9.99", "11.99"],
-        "release_dates": ["2023-03-01", "2023-04-01"]
-    }
-}
-possible_prices = []
-# Iterate through the dictionary
-# for link, data in result.items():
-#     print(f"Link: {link}")
+import re
+from datetime import datetime
+
+def should_post_item(item):
+    """
+    Determine whether an item should be posted based on its release date and stock status.
+    """
+    # Extract information from the item
+    release_date = item.get("release_date")  # Expected format: "YYYY-MM-DD"
+    stock_status = item.get("stock_status", "").lower()
+    pre_order_status = item.get("pre_order", False)
     
-#     # Access the nested dictionary
-#     price_list = data["price_list"]
-#     release_dates = data["release_dates"]
+    # Current date
+    today = datetime.now().date()
 
-#     # Print price list
-#     print("  Price List:")
-#     for price in price_list:
-#         print(f"    - {price}")
-#         possible_prices.append(float(price.replace('$', '').replace(',', '')))
+    # Check if the item is out of stock
+    if re.search(r"(out of stock|sold out|unavailable)", stock_status):
+        return False
 
-#     # Print release dates
-#     print("  Release Dates:")
-#     for date in release_dates:
-#         print(f"    - {date}")
+    # Check if the release date is in the future
+    if release_date:
+        release_date_obj = datetime.strptime(release_date, "%Y-%m-%d").date()
+        if release_date_obj > today:
+            return True
 
-#     print()  # Add a blank line for better readability
+    # Check if the item is in stock or available for pre-order
+    if "in stock" in stock_status or pre_order_status:
+        return True
 
-price_range = f"Price range: ${min(possible_prices):.2f} - ${max(possible_prices):.2f}"
-print(price_range)
+    return False
+
+# Example items
+items = [
+    {"name": "Barbie A", "release_date": "2024-11-21", "stock_status": "in stock", "pre_order": False},
+    {"name": "Barbie B", "release_date": "2024-11-15", "stock_status": "out of stock", "pre_order": False},
+    {"name": "Barbie C", "release_date": "2024-11-17", "stock_status": "pre-order available", "pre_order": True},
+]
+
+# Filter items
+for item in items:
+    if should_post_item(item):
+        print(f"Post: {item['name']}")
+    else:
+        print(f"Do not post: {item['name']}")
