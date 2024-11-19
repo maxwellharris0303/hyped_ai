@@ -1,10 +1,10 @@
 import re
 from bs4 import BeautifulSoup
-# import undetected_chromedriver as uc
+import undetected_chromedriver as uc
 
-# driver = uc.Chrome(version_main=130)
-# driver.maximize_window()
-# driver.get("https://maplestickers.com/products/golden-blitz-pre-order-monopoly-go-stickers-legit-trusted?srsltid=AfmBOoqd_c-L4yy-PzGE9KDp9w4pjD2ncib5XTSClwXMtgpbQlLic3UL")
+driver = uc.Chrome(version_main=130)
+driver.maximize_window()
+driver.get("https://hypebeast.com/2024/8/travis-scott-nike-zoom-field-jaxx-light-chocolate-info")
 
 def get_result(content):
     # Refined regex to focus on prices like $8.99 or similar (avoid $100.00 if possible)
@@ -17,7 +17,8 @@ def get_result(content):
     elements_with_price = soup.find_all(lambda tag: any('price' in str(value).lower() for value in tag.attrs.values()))
     print(len(elements_with_price))
 
-    price_pattern = re.compile(r'^[\$]\s?\d{1,3}(?:\s?[,.\s]\d{3})*(?:[.,]\d{2})?$')
+    # price_pattern = re.compile(r'^[\$]\s?\d{1,3}(?:\s?[,.\s]\d{3})*(?:[.,]\d{2})?$')
+    price_pattern = re.compile(r'^(USD|usd)?\s?[\$]\s?\d{1,3}(?:\s?[,.\s]\d{3})*(?:[.,]\d{2})?\s?(USD|usd)?$')
 
     # Filter and print only the lines that match exactly the price format
     price_list = []
@@ -28,4 +29,4 @@ def get_result(content):
 
     price_list = list(set(price_list))
     return price_list
-# print(get_result(driver.page_source))
+print(get_result(driver.page_source))

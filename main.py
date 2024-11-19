@@ -12,7 +12,7 @@ import asyncio
 import statistics
 import urllib.parse
 import asyncio
-import datetime
+from datetime import datetime
 import random
 from openai import OpenAI
 import discord_notifier
@@ -164,7 +164,7 @@ for title, image, price in zip(title_list, image_list, price_list):
                 print("  Price List:")
                 for price in prices:
                     print(f"    - {price}")
-                    possible_prices.append(float(price.replace('$', '').replace(',', '')))
+                    possible_prices.append(float(re.sub(r'[\$,USDusd\s]', '', price)))
 
                 # Print release dates
                 print("  Release Dates:")
@@ -174,9 +174,23 @@ for title, image, price in zip(title_list, image_list, price_list):
 
                 print()  # Add a blank line for better readability
 
+            # Convert strings to datetime objects
+            date_objects = [datetime.strptime(date, "%Y-%m-%d") for date in release_dates]
+            # Get today's date
+            today = datetime.today()
+            # Filter for future dates
+            future_dates = [date for date in date_objects if date > today]
+            # Find the nearest date
+            nearest_date = ""
+            if len(future_dates) != 0:
+                min_date = min(future_dates, key=lambda x: abs((x - today).days))
+                nearest_date = min_date.strftime("%B %d, %Y")
+                print("Nearest date:", nearest_date)
+
+
             if len(possible_prices) != 0:
                 price_range = f"Price range: ${min(possible_prices):.2f} - ${max(possible_prices):.2f}"
                 print(price_range)
-                discord_notifier.notify_to_discord_channel(title, image, average_sold_price, possible_buy_links, price_range, release_dates, search_ebay_flip)
+                discord_notifier.notify_to_discord_channel(title, image, average_sold_price, possible_buy_links, price_range, nearest_date, search_ebay_flip)
     driver.close()
     driver.switch_to.window(main_window)
