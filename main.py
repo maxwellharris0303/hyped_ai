@@ -26,6 +26,14 @@ def is_similar_sportscard(a, b, threshold=0.90):
     """Check if two strings are similar by a given threshold."""
     return SequenceMatcher(None, a, b).ratio() > threshold
 
+def clean_title(title):
+    # Remove "presale" or similar terms (case-insensitive)
+    title = re.sub(r'\b(confirmed presale|presale confirmed|confirmed pre-sale|pre-sale confirmed|presale|pre-order|preorder|pre-sale|order)\b', '', title, flags=re.IGNORECASE)
+    # Remove emojis (any character that isn't a basic letter, number, punctuation, or whitespace)
+    title = re.sub(r'[^\w\s,.\'-]', '', title)
+    # Remove extra spaces from the string
+    title = re.sub(r'\s+', ' ', title).strip()
+    return title
     
 
 # below finds hype flips
@@ -69,7 +77,6 @@ for item in items:
 # for title in title_list:
 #     if "presale" not in title.lower():
 #         print(title)
-
 # sleep(5000)
 # print(title_list)
 # print(price_list)
@@ -81,6 +88,7 @@ for title, image, price in zip(title_list, image_list, price_list):
     sanitized_title_text = urllib.parse.quote_plus(title)
     search_ebay_flip = "https://www.ebay.com/sch/i.html?_nkw=" + sanitized_title_text + "&_sacat=0&rt=nc&LH_Sold=1&LH_Complete=1"
     driver.get(search_ebay_flip)
+    sleep(5)
     # Wait for the eBay page to load and fetch elements with the class 's-item s-item__pl-on-bottom'
     # comparison_items = WebDriverWait(driver, 20).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "s-item.s-item__dsa-on-bottom.s-item__pl-on-bottom")))
     ul_element = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "ul[class=\"srp-results srp-list clearfix\"]")))
@@ -194,6 +202,6 @@ for title, image, price in zip(title_list, image_list, price_list):
             if len(possible_prices) != 0:
                 price_range = f"Price range: ${min(possible_prices):.2f} - ${max(possible_prices):.2f}"
                 print(price_range)
-                discord_notifier.notify_to_discord_channel(title, image, average_sold_price, possible_buy_links, price_range, nearest_date, search_ebay_flip)
+                discord_notifier.notify_to_discord_channel(clean_title(title), image, average_sold_price, possible_buy_links, price_range, nearest_date, search_ebay_flip)
     driver.close()
     driver.switch_to.window(main_window)

@@ -53,7 +53,7 @@ def search(title_text):
         + hrefs_string
     )
     client = OpenAI()
-
+    
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[

@@ -9,8 +9,6 @@ def notify_to_discord_channel(title_text, image, average_sold_price, possible_bu
 
     core_domains = [f"{tldextract.extract(link).domain}.{tldextract.extract(link).suffix}" for link in possible_buy_links]
 
-    # print(core_names)  # Output: ['amazon', 'bestbuy']
-
     # Format the core domains as clickable links
     formatted_links = "\n".join(
         [f"- [{domain}]({link})" for domain, link in zip(core_domains, possible_buy_links)]
