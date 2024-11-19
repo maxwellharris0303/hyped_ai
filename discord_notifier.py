@@ -1,12 +1,14 @@
 from discordwebhook import Discord
 from urllib.parse import urlparse
 import re
+import tldextract
 
 def notify_to_discord_channel(title_text, image, average_sold_price, possible_buy_links, price_range, nearest_date, search_ebay_flip):
     discord = Discord(url="https://discordapp.com/api/webhooks/1302301351878852741/X-0BTXp8LsZn0_1W1lNkClyCvnKztHGvpZIwoknOE5_xm3VRXXxdqZEwv-wF2Dpzqxuu")
     title = f"🤖 {title_text}"
 
-    core_domains = [re.search(r"https?://(?:www\.)?([^.]+)", link).group(1) for link in possible_buy_links]
+    core_domains = [f"{tldextract.extract(link).domain}.{tldextract.extract(link).suffix}" for link in possible_buy_links]
+
     # print(core_names)  # Output: ['amazon', 'bestbuy']
 
     # Format the core domains as clickable links

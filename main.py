@@ -39,7 +39,7 @@ driver.get("https://www.ebay.com/sch/i.html?_from=R40&_nkw=presale&_sacat=0&_sop
 ul_element = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "ul[class=\"srp-results srp-list clearfix\"]")))
 items = ul_element.find_elements(By.CSS_SELECTOR, "li[class*=\"s-item\"]")
 # print(len(items))
-items = items[:10]
+# items = items[:10]
 
 title_list = []
 price_list = []
@@ -66,6 +66,11 @@ for item in items:
             image_element = item.find_element(By.TAG_NAME, "img")
             image_list.append(image_element.get_attribute('src'))
 
+# for title in title_list:
+#     if "presale" not in title.lower():
+#         print(title)
+
+# sleep(5000)
 # print(title_list)
 # print(price_list)
 # print(image_list)
