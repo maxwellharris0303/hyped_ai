@@ -15,7 +15,6 @@ def get_result(content):
 
     # Find elements where any attribute contains 'price'
     elements_with_price = soup.find_all(lambda tag: any('price' in str(value).lower() for value in tag.attrs.values()))
-    print(len(elements_with_price))
 
     # price_pattern = re.compile(r'^[\$]\s?\d{1,3}(?:\s?[,.\s]\d{3})*(?:[.,]\d{2})?$')
     price_pattern = re.compile(r'^(USD|usd)?\s?[\$]\s?\d{1,3}(?:\s?[,.\s]\d{3})*(?:[.,]\d{2})?\s?(USD|usd)?$')

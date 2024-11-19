@@ -21,7 +21,7 @@ def get_formatted_dates(dates):
             print(f"Date format not recognized: {date_str}")
 
     # Print standardized dates
-    print(standardized_dates)
+    # print(standardized_dates)
     return standardized_dates
 
 # get_formatted_dates(dates)

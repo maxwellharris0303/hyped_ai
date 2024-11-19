@@ -26,7 +26,7 @@ def search(title_text):
 
     unwanted_links = [
         "google.com",
-        "ebay.co",
+        "ebay.",
         "stockx.com",
         "instagram.com",
         "facebook.com",
@@ -83,12 +83,13 @@ def search(title_text):
         price_list = extract_price.get_result(content)
         release_dates = extract_date.get_result(content)
 
-        data = {
-            "link": link,
-            "price_list": price_list,
-            "release_dates": get_formatted_dates(release_dates)
-        }
-        result.append(data)
+        if price_list:
+            data = {
+                "link": link,
+                "price_list": price_list,
+                "release_dates": get_formatted_dates(release_dates)
+            }
+            result.append(data)
 
     driver.quit()
     return result

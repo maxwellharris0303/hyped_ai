@@ -33,8 +33,8 @@ def get_result(content):
     # Remove duplicates and sort
     unique_dates = sorted(set(dates))
 
-    # Print the results
-    for date in unique_dates:
-        print(date)
+    # # Print the results
+    # for date in unique_dates:
+    #     print(date)
     
     return unique_dates

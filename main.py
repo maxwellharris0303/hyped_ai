@@ -38,7 +38,7 @@ driver.get("https://www.ebay.com/sch/i.html?_from=R40&_nkw=presale&_sacat=0&_sop
 # items = WebDriverWait(driver, 20).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "s-item")))
 ul_element = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "ul[class=\"srp-results srp-list clearfix\"]")))
 items = ul_element.find_elements(By.CSS_SELECTOR, "li[class*=\"s-item\"]")
-print(len(items))
+# print(len(items))
 items = items[:10]
 
 title_list = []
@@ -59,16 +59,16 @@ for item in items:
         # Use regex to extract the first valid price number (ignoring ranges like "$10.00 to $20.00")
         price_value = re.findall(r'\d+\.?\d*', price_text)  # Extracts numbers
         if len(price_value) > 0:
-            print(f"Title found: {title_text}")
-            print(f"Price: {price_value[0]}")
+            # print(f"Title found: {title_text}")
+            # print(f"Price: {price_value[0]}")
             title_list.append(title_text)
             price_list.append(price_value[0])
             image_element = item.find_element(By.TAG_NAME, "img")
             image_list.append(image_element.get_attribute('src'))
 
-print(title_list)
-print(price_list)
-print(image_list)
+# print(title_list)
+# print(price_list)
+# print(image_list)
 main_window = driver.current_window_handle
 
 for title, image, price in zip(title_list, image_list, price_list):
@@ -80,7 +80,7 @@ for title, image, price in zip(title_list, image_list, price_list):
     # comparison_items = WebDriverWait(driver, 20).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "s-item.s-item__dsa-on-bottom.s-item__pl-on-bottom")))
     ul_element = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "ul[class=\"srp-results srp-list clearfix\"]")))
     comparison_items = ul_element.find_elements(By.CSS_SELECTOR, "li[class*=\"s-item\"]")
-    print(len(comparison_items))
+    # print(len(comparison_items))
     
     # sleep(3)
     
@@ -97,7 +97,7 @@ for title, image, price in zip(title_list, image_list, price_list):
             # Extract the title of the current item
             flip_element = item.find_element(By.CLASS_NAME, 's-item__title')
             flip_text = flip_element.text.strip()
-            print(flip_text)
+            # print(flip_text)
 
 
             # Check if the title contains a year (e.g., any four digits)
@@ -111,9 +111,9 @@ for title, image, price in zip(title_list, image_list, price_list):
                 similar_check = is_similar_sportscard(flip_text.lower(), title.lower())
             else:
                 similar_check = is_similar(flip_text.lower(), title.lower())
-            print("-----------")
-            print(title)
-            print(similar_check)
+            # print("-----------")
+            # print(title)
+            # print(similar_check)
 
             if similar_check:
                 # Find and process positive elements
@@ -133,7 +133,7 @@ for title, image, price in zip(title_list, image_list, price_list):
         except Exception as e:
             print(f"Error processing item: {e}")
 
-    print(f"POSTIVE_VALUES: {positive_values}")
+    # print(f"POSTIVE_VALUES: {positive_values}")
     # Calculate the average sell price
     if positive_values:
         average_sold_price = f"${statistics.mean(positive_values):.2f}"  # Format the average to 2 decimal places
@@ -141,11 +141,9 @@ for title, image, price in zip(title_list, image_list, price_list):
         average_sold_price = "$Unreliable Sales Data Found"
 
 
-    print(f"Average sold price: {average_sold_price}")
-    print(image)
+    # print(f"Average sold price: {average_sold_price}")
     if average_sold_price != "$Unreliable Sales Data Found":
         result = google_search.search(title)
-        print(result)
         if len(result) !=0:
             # Loop through the dictionary and print each URL with its prices
             possible_prices = []
