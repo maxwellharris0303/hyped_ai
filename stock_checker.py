@@ -1,11 +1,11 @@
 import re
 from bs4 import BeautifulSoup
-import undetected_chromedriver as uc
+# import undetected_chromedriver as uc
 
-# Initialize the undetected Chrome driver
-driver = uc.Chrome(version_main=130)
-driver.maximize_window()
-driver.get("https://www.warhammer.com/en-WW/shop/tau-empire-retaliation-cadre-2024?queryID=cbc34c8e69f72de08dedcc3ada1205c2&srsltid=AfmBOooDat22iM61Zb2rlyP_c0tVuaH5999wo6OOSGSMT2w2Z0Au2qqz")
+# # Initialize the undetected Chrome driver
+# driver = uc.Chrome(version_main=130)
+# driver.maximize_window()
+# driver.get("https://www.topps.com/products/paul-skenes-2024-mlb-topps-now-reg-card-288")
 
 def get_result(content):
     soup = BeautifulSoup(content, 'html.parser')
@@ -15,8 +15,8 @@ def get_result(content):
         tag.decompose()
 
     # Define the regex pattern for full match
-    pattern_out_stock = re.compile(r"^(out of stock|sold out|unavailable)$", re.IGNORECASE)
-    pattern_in_stock = re.compile(r"^\s*\d*\s*(in stock|add to cart|pre-order|pre-order now|add to wishlist|available)$", re.IGNORECASE)
+    pattern_out_stock = re.compile(r"^(out of stock|sold out|unavailable|currently unavailable)$", re.IGNORECASE)
+    pattern_in_stock = re.compile(r"^\s*\d*\s*(in stock|add to cart|pre-order|pre-order now|add to wishlist|available)[!.,]?$", re.IGNORECASE)
 
     out_stock_array = []
     in_stock_array = []
@@ -33,9 +33,15 @@ def get_result(content):
     in_stock_array = list(set(in_stock_array))
     print(f"Out of stock match found: {out_stock_array}")
     print(f"In stock match found: {in_stock_array}")
+    
+    if "out of stock" in out_stock_array or "sold out" in out_stock_array:
+        return False
+    if len(in_stock_array) == 0 and len(out_stock_array) == 0:
+        return False
+    return True
 
-# Pass the page source to the function
-get_result(driver.page_source)
+# # Pass the page source to the function
+# get_result(driver.page_source)
 
-# Close the driver
-driver.quit()
+# # Close the driver
+# driver.quit()
