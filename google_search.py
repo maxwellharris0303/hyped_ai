@@ -1,4 +1,4 @@
-import time
+from time import sleep
 import undetected_chromedriver as uc
 from difflib import SequenceMatcher
 from urllib.parse import urlparse, urlunparse
@@ -12,6 +12,7 @@ import os
 from bs4 import BeautifulSoup
 import extract_date
 import extract_price
+import stock_checker
 from format_date import get_formatted_dates
 
 # title_text = "Presale The Stanley X LoveShackFancy Holiday Quencher | 20 OZ - Rosa Beaux Pink"
@@ -76,14 +77,15 @@ def search(title_text):
 
     for link in links_list:
         driver.get(link)
-
+        sleep(5)
         # Get the page source
         content = driver.page_source
 
         price_list = extract_price.get_result(content)
         release_dates = extract_date.get_result(content)
+        stock_result = stock_checker.get_result(content)
 
-        if price_list:
+        if price_list and stock_result:
             data = {
                 "link": link,
                 "price_list": price_list,
